@@ -27,9 +27,9 @@
   background: teal;
   color: silver;
 }
-.inUse {
-  background: teal;
-  color: teal;
+.difficulty .inUse {
+  background: #00BFA4;
+  color: #505009;
 }
 button#reset {
   outline: none;

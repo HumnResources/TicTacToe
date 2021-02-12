@@ -22,13 +22,13 @@ document.getElementById(difficulty).classList.add('inUse');
 * BOARD DISPLAY
 *
 */
-const render_board = (board) => {
+function render_board(board) {
   boardContainer.innerHTML = "";
   var cellIndex = 0;  
   const rows = board.length, cols = board[0].length;
   for (var i = 0; i < rows; i++) {
     for (var j = 0; j < cols; j++) {
-      boardContainer.innerHTML += `<div id='cell_${cellIndex}' class='cell' onclick='play_player(${cellIndex}, "${player}")'>${board[i][j]}</div>`;
+      boardContainer.innerHTML += `<div id='cell_${cellIndex}' class='cell' onclick='make_move(${cellIndex}, "${player}")'>${board[i][j]}</div>`;
       if (board[i][j] == player || board[i][j] == computer) {
         document.querySelector(`#cell_${cellIndex}`).classList.add("occupied");
       }
@@ -37,26 +37,38 @@ const render_board = (board) => {
   }
 }
 
-const make_move = (move, mark) => {
+function make_move(move, mark) {
   // Updates global gameBoard variable to visualize change to user
-  get_remaining_moves(gameBoard).forEach(m => {
-      if (m === move) {
-          var cellIndex = 0;
-          const rows = gameBoard.length, cols = gameBoard[0].length;
-          for (var i = 0; i < rows; i++) {
-              for (var j = 0; j < cols; j++) {
-                  if (cellIndex === move) {
-                      gameBoard[i][j] = mark;
-                      render_board(gameBoard)
-                  }
-                  cellIndex++;
-              }
+  if (valid_move(gameBoard, move)) {
+    var cellIndex = 0;
+    const rows = gameBoard.length, cols = gameBoard[0].length;
+    for (var i = 0; i < rows; i++) {
+      for (var j = 0; j < cols; j++) {
+        if (cellIndex === move) {
+          gameBoard[i][j] = mark;
+          game_loop()
+          if (mark === player) {
+            play_computer();
           }
+          return;
+        }
+        cellIndex++;
       }
-  })
+    }
+  }
 }
 
-const get_remaining_moves = (board) => {
+function valid_move(board, move) {
+    var moves = get_remaining_moves(board);
+    for (var i = 0; i < moves.length; i++) {
+        if (move === moves[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function get_remaining_moves(board) {
   // Returns a list of available indexies, for condition checks and ai
     
   const rows = board.length, cols = board[0].length;
@@ -73,46 +85,34 @@ const get_remaining_moves = (board) => {
   return moves;
 }
 
-const play_player = (move, mark) => {
-    get_remaining_moves(gameBoard).forEach(mv => {
-        if (mv.toString() == move) {
-          make_move(move, mark)
-          game_loop()
-          play_computer()
-        }
-    })
-}
-
-
 /*
 *
 * AI MINIMAX
 *
 */
-const play_computer = () => {
+function play_computer() {
   if (!isGameOver) {
     var selected;
-    
-    if (difficulty === 'easy') {
-        selected = minimax(gameBoard, 1, false, -Infinity, Infinity, false)
-    }
-    else if (difficulty === 'normal') {
-        selected = minimax(gameBoard, 4, false, -Infinity, Infinity, true)
-    }
-    else if (difficulty === 'hard') {
-        selected = minimax(gameBoard, 5, false, -Infinity, Infinity, true)
-    }
-    else if (difficulty === 'impossible') {
-        selected = minimax(gameBoard, 12, false, -Infinity, Infinity, true)
-    }
-    
-    make_move(selected[0], computer);
-    game_loop();
+    do {
+        if (difficulty === 'easy') {
+            selected = Math.floor(Math.random() * 9);
+        }
+        else if (difficulty === 'normal') {
+            selected = minimax(gameBoard, 2, false, -Infinity, Infinity, true)[0]
+        }
+        else if (difficulty === 'hard') {
+            selected = minimax(gameBoard, 4, false, -Infinity, Infinity, true)[0]
+        }
+        else if (difficulty === 'impossible') {
+            selected = minimax(gameBoard, 10, false, -Infinity, Infinity, true)[0]
+        }
+    } while(!valid_move(gameBoard, selected));
+    make_move(selected, computer);
     mmCalls = 0;
   }
 }
 
-const minimax = (board, depth, isMax, alpha, beta, useAB) => {
+function minimax(board, depth, isMax, alpha, beta, useAB) {
     mmCalls++;
     mmCallsTotal++;
     const moves = get_remaining_moves(board);
@@ -180,19 +180,7 @@ const minimax = (board, depth, isMax, alpha, beta, useAB) => {
     return [bestMove, bestScore];
 }
 
-const check_game_over = (board) => {
-  let flag = true;
-  board.forEach(row => {
-      row.forEach(cell => {
-          if (cell !== player && cell !== computer) {
-              flag = false;
-          }
-      })
-  })
-  return flag;
-};
-
-const simulate_move = (board, move, mark) => {
+function simulate_move(board, move, mark) {
     
   var copyBoard = board.map(a => a.slice())
   var cellIndex = 0;
@@ -208,7 +196,7 @@ const simulate_move = (board, move, mark) => {
   return copyBoard;
 }
  
-const select_difficulty = (newDiffuculty) => {
+function select_difficulty(newDiffuculty) {
     if (newDiffuculty === 'easy' || newDiffuculty === 'normal' ||
         newDiffuculty === 'hard' || newDiffuculty === 'impossible') {
         
@@ -225,7 +213,7 @@ const select_difficulty = (newDiffuculty) => {
 * CONDITION CHECKS + RESET
 *
 */
-const transpose = (matrix) => {
+function transpose(matrix) {
   const rows = matrix.length, cols = matrix[0].length;
   const grid = [];
   for (var j = 0; j < cols; j++) {
@@ -239,38 +227,42 @@ const transpose = (matrix) => {
   return grid;
 }
   
-const check_line = (a, b, c) => {
+function check_line(a, b, c) {
   return (a === b && b === c && 
           (a === player || a === computer));
 }
 
-const check_winner = (board) => {
-  var res = false;
-  board.forEach((row, i) => {
-      if (check_line(row[0], row[1], row[2])) {
-          res = row[0]
-      }
-  })
-  transpose(board).forEach(row => {
-    if (check_line(row[0], row[1], row[2])) {
-        res = row[0]
-    }
-  })
+function check_winner(board) {
+  
   var diag = (check_line(board[0][0], board[1][1], board[2][2]) || 
              check_line(board[0][2], board[1][1], board[2][0]) && 
              (board[1][1] === player || board[1][1] === computer))
   if (diag) {
-    res = board[1][1];
+    return board[1][1];
   }
-  return res;
+  
+  for (var i = 0; i < board.length; i++) {
+      var row = board[i];
+      if (check_line(row[0], row[1], row[2])) {
+          return row[0]
+      }
+  }
+  var nBoard = transpose(board);
+  for (var i = 0; i < board.length; i++) {
+      var row = nBoard[i];
+      if (check_line(row[0], row[1], row[2])) {
+          return row[0]
+      }
+  }
+  return false;
 }
 
-const check_draw = (board) => {
+function check_draw(board) {
   return (!check_winner(board) && 
           get_remaining_moves(board).length == 0)
 }
 
-const check_game = () => {
+function check_game() {
   var result = check_winner(gameBoard);
   if (result === computer) {
     winner.innerText = "Winner is computer";
@@ -290,8 +282,6 @@ const check_game = () => {
     isGameOver = true;
     draws++;
   }
-  //logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
-  
   if (isGameOver) {
       boardContainer.innerHTML = "";
       var cellIndex = 0;  
@@ -308,7 +298,7 @@ const check_game = () => {
   }
 }
 
-const reset_board = () => {
+function reset_board() {
   gameBoard = [["", "", ""], // [0][0], [0][1], [0][2]
                ["", "", ""], // [1][0], [1][1], [1][2]
               ["", "", ""]]; // [2][0], [2][1], [2][2]
@@ -322,10 +312,11 @@ const reset_board = () => {
   mmCalls = 0;
 }
 
-const game_loop = () => {
+function game_loop() {
   render_board(gameBoard)
-  logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws} \nTotal Minimax Simulations: ${mmCallsTotal} \nMinimax Simulations for move: ${mmCalls}`
-  //logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
+  logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws} 
+                            Total Minimax Simulations: ${mmCallsTotal} 
+                            Minimax Simulations for move: ${mmCalls}`
   check_game()
 }
 

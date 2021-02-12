@@ -8,13 +8,15 @@ let gameBoard = [["", "", ""],  // [0][0], [0][1], [0][2]
                  ["", "", ""],  // [1][0], [1][1], [1][2]
                  ["", "", ""]]; // [2][0], [2][1], [2][2]
 let isGameOver = false;
-let pWins = 0, cWins = 0, draws = 0;
+let pWins = 0, cWins = 0, draws = 0
+let mmCallsTotal = 0, mmCalls = 0;
+let difficulty = 'normal';
 const player = 'X', computer = 'O';
 const boardContainer = document.querySelector(".grid");
 const winnerStatement = document.getElementById("winner");
 const logStatement = document.getElementById("log");
-logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
-  
+logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws} \nTotal Minimax Simulations: ${mmCallsTotal} \nMinimax Simulations for move: ${mmCalls}`
+document.getElementById(difficulty).classList.add('inUse');
 /*
 *
 * BOARD DISPLAY
@@ -90,17 +92,32 @@ const play_player = (move, mark) => {
 const play_computer = () => {
   if (!isGameOver) {
     var selected;
-    selected = minimax(gameBoard, 10, false)
+    
+    if (difficulty === 'easy') {
+        selected = minimax(gameBoard, 1, false, -Infinity, Infinity, false)
+    }
+    else if (difficulty === 'normal') {
+        selected = minimax(gameBoard, 4, false, -Infinity, Infinity, true)
+    }
+    else if (difficulty === 'hard') {
+        selected = minimax(gameBoard, 5, false, -Infinity, Infinity, true)
+    }
+    else if (difficulty === 'impossible') {
+        selected = minimax(gameBoard, 12, false, -Infinity, Infinity, true)
+    }
     
     make_move(selected[0], computer);
     game_loop();
+    mmCalls = 0;
   }
 }
 
-const minimax = (board, depth, isMax) => {
-    var moves = get_remaining_moves(board);
-    var offset = moves.length;
-    var winner = check_winner(board);
+const minimax = (board, depth, isMax, alpha, beta, useAB) => {
+    mmCalls++;
+    mmCallsTotal++;
+    const moves = get_remaining_moves(board);
+    const offset = moves.length;
+    const winner = check_winner(board);
     
     if (winner === player) {
         return [-1, 10+offset];
@@ -121,25 +138,44 @@ const minimax = (board, depth, isMax) => {
     var bestMove = -1;
     if (isMax) {
       bestScore = -Infinity;
-      moves.forEach(move => {
+      for (var i = 0; i < offset; i++) {
+        var move = moves[i];
         var nBoard = simulate_move(board, move, player)
-        var moveScore = minimax(nBoard, depth-1, false)[1];
+        var moveScore = minimax(nBoard, depth-1, false, alpha, beta)[1];
         if (moveScore > bestScore) {
             bestScore = moveScore;
-            bestMove = move;
+            bestMove = move
         }
-      })
+        if (useAB) {
+          if (bestScore > alpha) {
+            alpha = bestScore;
+          }
+          if (beta <= alpha) {
+            break;
+          }
+        }
+      } 
     }
     else {
       bestScore = Infinity;
-      moves.forEach(move => {
+      
+     for (var i = 0; i < offset; i++) {
+        var move = moves[i];
         var nBoard = simulate_move(board, move, computer)
-        var moveScore = minimax(nBoard, depth-1, true)[1];
+        var moveScore = minimax(nBoard, depth-1, true, alpha, beta)[1];
         if (moveScore < bestScore) {
             bestScore = moveScore;
             bestMove = move;
         }
-      })
+        if (useAB)  {
+          if (bestScore < beta) {
+            beta = bestScore;
+          }
+          if (beta <= alpha) {
+            break;
+          }
+        }
+      }
     } 
     return [bestMove, bestScore];
 }
@@ -171,7 +207,18 @@ const simulate_move = (board, move, mark) => {
   }
   return copyBoard;
 }
-
+ 
+const select_difficulty = (newDiffuculty) => {
+    if (newDiffuculty === 'easy' || newDiffuculty === 'normal' ||
+        newDiffuculty === 'hard' || newDiffuculty === 'impossible') {
+        
+        document.getElementById(difficulty).classList.remove('inUse')
+        difficulty = newDiffuculty;
+        reset_board()
+        document.getElementById(newDiffuculty).classList.add('inUse')
+    }
+    
+}
 
 /*
 *
@@ -243,7 +290,7 @@ const check_game = () => {
     isGameOver = true;
     draws++;
   }
-  logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
+  //logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
   
   if (isGameOver) {
       boardContainer.innerHTML = "";
@@ -270,12 +317,15 @@ const reset_board = () => {
   winner.classList.remove("computerWin");
   winner.classList.remove("draw");
   winner.innerText = "";
-  game_loop()
+  game_loop();
+  mmCallsTotal = 0;
+  mmCalls = 0;
 }
 
 const game_loop = () => {
   render_board(gameBoard)
-  logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
+  logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws} \nTotal Minimax Simulations: ${mmCallsTotal} \nMinimax Simulations for move: ${mmCalls}`
+  //logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
   check_game()
 }
 

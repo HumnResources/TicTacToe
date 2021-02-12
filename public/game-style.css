@@ -4,7 +4,7 @@
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
-.container {
+.container { 
   min-height: 75vh;
   display: flex;
   flex-direction: column;
@@ -12,16 +12,36 @@
   justify-content: center;
   background: #eee;
 }
-button {
+.difficulty button {
   outline: none;
-  border: 4px solid green;
+  margin-bottom: 10px;
+  border: 2px solid black;
   padding: 10px 20px;
   font-size: 1rem;
   font-weight: bold;
   background: none;
   transition: all 0.2s ease-in-out;
 }
-button:hover {
+.difficulty button:active y{
+  cursor: pointer;
+  background: teal;
+  color: silver;
+}
+.inUse {
+  background: teal;
+  color: teal;
+}
+button#reset {
+  outline: none;
+  border: 4px solid green;
+  padding: 10px 20px;
+  margin: 10px 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  background: none;
+  transition: all 0.2s ease-in-out;
+}
+button#reset:active {
   cursor: pointer;
   background: green;
   color: white;

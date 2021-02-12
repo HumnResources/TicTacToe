@@ -8,12 +8,13 @@ let gameBoard = [["", "", ""],  // [0][0], [0][1], [0][2]
                  ["", "", ""],  // [1][0], [1][1], [1][2]
                  ["", "", ""]]; // [2][0], [2][1], [2][2]
 let isGameOver = false;
-const player = 'X';
-const computer = 'O';
+let pWins = 0, cWins = 0, draws = 0;
+const player = 'X', computer = 'O';
 const boardContainer = document.querySelector(".grid");
 const winnerStatement = document.getElementById("winner");
 const logStatement = document.getElementById("log");
-
+logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
+  
 /*
 *
 * BOARD DISPLAY
@@ -228,18 +229,36 @@ const check_game = () => {
     winner.innerText = "Winner is computer";
     winner.classList.add("computerWin");
     isGameOver = true;
+    cWins++;
   }
   else if (result === player) {
     winner.innerText = "Winner is player!!";
     winner.classList.add("playerWin");
     isGameOver = true;
+    pWins++;
   }
   else if (check_draw(gameBoard)) {
     winner.innerText = "Draw!";
     winner.classList.add("draw");
     isGameOver = true;
+    draws++;
   }
+  logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
   
+  if (isGameOver) {
+      boardContainer.innerHTML = "";
+      var cellIndex = 0;  
+      const rows = gameBoard.length, cols = gameBoard[0].length;
+      for (var i = 0; i < rows; i++) {
+        for (var j = 0; j < cols; j++) {
+          boardContainer.innerHTML += `<div id='cell_${cellIndex}' class='cell'>${gameBoard[i][j]}</div>`;
+          if (gameBoard[i][j] == player || gameBoard[i][j] == computer) {
+            document.querySelector(`#cell_${cellIndex}`).classList.add("occupied");
+          }
+          cellIndex++;
+        }
+      }
+  }
 }
 
 const reset_board = () => {
@@ -251,14 +270,13 @@ const reset_board = () => {
   winner.classList.remove("computerWin");
   winner.classList.remove("draw");
   winner.innerText = "";
-  log.innerText = "";
-  mmCalls = 0;
-  render_board(gameBoard);
+  game_loop()
 }
 
 const game_loop = () => {
-  check_game()
   render_board(gameBoard)
+  logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
+  check_game()
 }
 
 /*

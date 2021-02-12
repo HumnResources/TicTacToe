@@ -1,0 +1,86 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.container {
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #eee;
+}
+button {
+  outline: none;
+  border: 4px solid green;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  background: none;
+  transition: all 0.2s ease-in-out;
+}
+button:hover {
+  cursor: pointer;
+  background: green;
+  color: white;
+}
+.grid {
+  display: grid;
+  width: 300px;
+  height: 300px;
+  grid-template-columns: auto auto auto;
+}
+.cell {
+  display: flex;
+  width: 100px;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: bold;
+  border: 3px solid black;
+  transition: background 0.2s ease-in-out;
+}
+.cell:hover {
+  cursor: pointer;
+  background: #0ff30f;
+}
+.occupied:hover {
+  background: #ff3a3a;
+}
+#cell_0,
+#cell_1,
+#cell_2 {
+    border-top: none;
+}
+#cell_0,
+#cell_3,
+#cell_6 {
+    border-left: none;
+}
+#cell_2,
+#cell_5,
+#cell_8 {
+    border-right: none;
+}
+#cell_6,
+#cell_7,
+#cell_8 {
+    border-bottom: none;
+}
+.playerWin {
+  color: green;
+}
+
+.computerWin {
+  color: red;
+}
+
+.draw {
+  color: orangered;
+}
+.log {
+  color: purple;
+}

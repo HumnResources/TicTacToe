@@ -15,7 +15,7 @@ const player = 'X', computer = 'O';
 const boardContainer = document.querySelector(".grid");
 const winnerStatement = document.getElementById("winner");
 const logStatement = document.getElementById("log");
-logStatement.innerText = `Computer: ${cWins} | Player: ${pWins}`
+logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
 document.getElementById(difficulty).classList.add('inUse');
 /*
 *
@@ -200,7 +200,7 @@ function select_difficulty(newDiffuculty) {
         document.getElementById(difficulty).classList.remove('inUse')
         difficulty = newDiffuculty;
         reset_board()
-        document.getElementById(diffuculty).classList.add('inUse')
+        document.getElementById(newDiffuculty).classList.add('inUse')
     }
     
 }

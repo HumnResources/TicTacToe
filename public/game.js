@@ -197,7 +197,7 @@ function simulate_move(board, move, mark) {
 }
  
 function select_difficulty(newDiffuculty) {
-    if (newDiffuculty === 'easy' || newDiffuculty === 'normal' ||
+    if (newDiffuculty === 'random' || newDiffuculty === 'normal' ||
         newDiffuculty === 'hard' || newDiffuculty === 'impossible') {
         
         document.getElementById(difficulty).classList.remove('inUse')

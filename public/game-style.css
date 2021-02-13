@@ -14,7 +14,7 @@
 }
 .difficulty button {
   outline: none;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   border: 2px solid black;
   padding: 10px 20px;
   font-size: 1rem;
@@ -35,7 +35,7 @@ button#reset {
   outline: none;
   border: 4px solid green;
   padding: 10px 20px;
-  margin: 10px 10px;
+  margin: 30px 30px;
   font-size: 1rem;
   font-weight: bold;
   background: none;
@@ -102,5 +102,6 @@ button#reset:active {
   color: orangered;
 }
 .log {
+  margin-top: 15px;
   color: purple;
 }

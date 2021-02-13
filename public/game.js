@@ -94,7 +94,7 @@ function play_computer() {
   if (!isGameOver) {
     var selected;
     do {
-        if (difficulty === 'easy') {
+        if (difficulty === 'random') {
             selected = Math.floor(Math.random() * 9);
         }
         else if (difficulty === 'normal') {

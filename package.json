@@ -1,5 +1,5 @@
 {
-  "name": "express-ttt",
+  "name": "tic-tac-toe",
   "version": "1.0.0",
   "description": "Tic Tac Toe",
   "main": "index.js",
@@ -9,8 +9,7 @@
   "author": "Chase Ziska",
   "license": "ISC",
   "dependencies": {
-    "eslint": "^7.19.0",
-    "express": "^4.17.1"
+    "eslint": "^7.19.0"
   },
   "repository": {
     "type": "git",

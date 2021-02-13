@@ -13,14 +13,19 @@
   background: #eee;
 }
 .difficulty button {
-  outline: none;
+  outline: n;
   margin-bottom: 30px;
   border: 2px solid black;
-  padding: 10px 20px;
+  padding: 8px 8px;
   font-size: 1rem;
   font-weight: bold;
   background: none;
   transition: all 0.2s ease-in-out;
+}
+.difficulty button:hover y{
+  cursor: pointer;
+  background: teal;
+  color: silver;
 }
 .difficulty button:active y{
   cursor: pointer;

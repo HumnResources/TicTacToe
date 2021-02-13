@@ -15,7 +15,7 @@ const player = 'X', computer = 'O';
 const boardContainer = document.querySelector(".grid");
 const winnerStatement = document.getElementById("winner");
 const logStatement = document.getElementById("log");
-logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws} \nTotal Minimax Simulations: ${mmCallsTotal} \nMinimax Simulations for move: ${mmCalls}`
+logStatement.innerText = `Computer: ${cWins} | Player: ${pWins}`
 document.getElementById(difficulty).classList.add('inUse');
 /*
 *
@@ -70,7 +70,6 @@ function valid_move(board, move) {
 
 function get_remaining_moves(board) {
   // Returns a list of available indexies, for condition checks and ai
-    
   const rows = board.length, cols = board[0].length;
   var moves = [];
   var cellIndex = 0;
@@ -158,7 +157,6 @@ function minimax(board, depth, isMax, alpha, beta, useAB) {
     }
     else {
       bestScore = Infinity;
-      
      for (var i = 0; i < offset; i++) {
         var move = moves[i];
         var nBoard = simulate_move(board, move, computer)
@@ -181,7 +179,6 @@ function minimax(board, depth, isMax, alpha, beta, useAB) {
 }
 
 function simulate_move(board, move, mark) {
-    
   var copyBoard = board.map(a => a.slice())
   var cellIndex = 0;
   const rows = board.length, cols = board[0].length;
@@ -233,7 +230,6 @@ function check_line(a, b, c) {
 }
 
 function check_winner(board) {
-  
   var diag = (check_line(board[0][0], board[1][1], board[2][2]) || 
              check_line(board[0][2], board[1][1], board[2][0]) && 
              (board[1][1] === player || board[1][1] === computer))
@@ -314,9 +310,7 @@ function reset_board() {
 
 function game_loop() {
   render_board(gameBoard)
-  logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws} 
-                            Total Minimax Simulations: ${mmCallsTotal} 
-                            Minimax Simulations for move: ${mmCalls}`
+  logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
   check_game()
 }
 

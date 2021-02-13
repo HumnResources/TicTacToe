@@ -11,12 +11,11 @@ let isGameOver = false;
 let pWins = 0, cWins = 0, draws = 0
 let mmCallsTotal = 0, mmCalls = 0;
 let difficulty = 'normal';
+
 const player = 'X', computer = 'O';
 const boardContainer = document.querySelector(".grid");
 const winnerStatement = document.getElementById("winner");
 const logStatement = document.getElementById("log");
-logStatement.innerText = `Computer: ${cWins} | Player: ${pWins} | Draws: ${draws}`
-document.getElementById(difficulty).classList.add('inUse');
 /*
 *
 * BOARD DISPLAY
@@ -39,6 +38,10 @@ function render_board(board) {
 
 function make_move(move, mark) {
   // Updates global gameBoard variable to visualize change to user
+  
+  console.log(`${move} ${mark}`)
+
+  
   if (valid_move(gameBoard, move)) {
     var cellIndex = 0;
     const rows = gameBoard.length, cols = gameBoard[0].length;
@@ -319,4 +322,6 @@ function game_loop() {
 * GAME INITIALIZE
 *
 */
+
+document.getElementById(difficulty).classList.add('inUse');
 render_board(gameBoard)

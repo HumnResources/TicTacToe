@@ -203,7 +203,7 @@ function select_difficulty(newDiffuculty) {
         document.getElementById(difficulty).classList.remove('inUse')
         difficulty = newDiffuculty;
         reset_board()
-        document.getElementById(newDiffuculty).classList.add('inUse')
+        document.getElementById(diffuculty).classList.add('inUse')
     }
     
 }

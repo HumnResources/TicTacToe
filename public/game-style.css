@@ -65,7 +65,7 @@ button#reset:hover {
   background: #0ff30f;
 }
 .occupied {
-  background: #393939;
+  background: #FFBA8E;
 }
 .occupied:hover {
   background: #ff3a3a;

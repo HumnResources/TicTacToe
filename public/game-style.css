@@ -64,6 +64,9 @@ button#reset:hover {
   cursor: pointer;
   background: #0ff30f;
 }
+.cell .winningCell {
+  background: gold;
+}
 .occupied {
   background: #FFCA7C;
 }

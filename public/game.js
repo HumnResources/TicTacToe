@@ -1,4 +1,3 @@
-
 /* TIC TAC TOE BY CHASE ZISKA
 *
 * INITIALIZE VARIABLES
@@ -115,7 +114,7 @@ function minimax(board, depth, isMax, alpha, beta, useAB) {
     mmCallsTotal++;
     const moves = get_remaining_moves(board);
     const offset = moves.length;
-    const winner = check_winner(board)[1];
+    const winner = check_winner(board);
     
     if (winner === player) {
         return [-1, 10+offset];
@@ -231,25 +230,25 @@ function check_line(a, b, c) {
 function check_winner(board) {
     
   if (check_line(board[0][0], board[1][1], board[2][2]) && (board[1][1] === player || board[1][1] === computer)) {
-    return [true, board[0][0], board[1][1], board[2][2]];
+    return board[1][1];//[true, '00', '11', '22'];
   }
   if (check_line(board[0][2], board[1][1], board[2][0]) && (board[1][1] === player || board[1][1] === computer)) {
-    return [true, board[0][2], board[1][1], board[2][0]];
+    return board[0][2];//[true, board[0][2], board[1][1], board[2][0]];
   }
   for (var i = 0; i < board.length; i++) {
       var row = board[i];
       if (check_line(row[0], row[1], row[2])) {
-          return [true, row[0], row[1], row[2]]
+          return row[0];//[true, row[0], row[1], row[2]]
       }
   }
   var nBoard = transpose(board);
   for (var i = 0; i < board.length; i++) {
       var row = nBoard[i];
       if (check_line(row[0], row[1], row[2])) {
-          return [true, row[0], row[1], row[2]]
+          return row[0];//[true, row[0], row[1], row[2]]
       }
   }
-  return [false];
+  return false;//[false];
 }
 
 function check_draw(board) {
@@ -259,13 +258,13 @@ function check_draw(board) {
 
 function check_game() {
   var result = check_winner(gameBoard);
-  if (result[1] === computer) {
+  if (result === computer) {
     winner.innerText = "Winner is computer";
     winner.classList.add("computerWin");
     isGameOver = true;
     cWins++;
   }
-  else if (result[1] === player) {
+  else if (result === player) {
     winner.innerText = "Winner is player!!";
     winner.classList.add("playerWin");
     isGameOver = true;
@@ -286,11 +285,6 @@ function check_game() {
           boardContainer.innerHTML += `<div id='cell_${cellIndex}' class='cell'>${gameBoard[i][j]}</div>`;
           if (gameBoard[i][j] == player || gameBoard[i][j] == computer) {
             document.querySelector(`#cell_${cellIndex}`).classList.add("occupied");
-          }
-          if (result[0]) {
-            document.querySelector(`#cell_${result[1]}`).classList.add("winningCell");
-            document.querySelector(`#cell_${result[2]}`).classList.add("winningCell");
-            document.querySelector(`#cell_${result[3]}`).classList.add("winningCell");
           }
           cellIndex++;
         }

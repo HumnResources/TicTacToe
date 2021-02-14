@@ -38,10 +38,6 @@ function render_board(board) {
 
 function make_move(move, mark) {
   // Updates global gameBoard variable to visualize change to user
-  
-  console.log(`${move} ${mark}`)
-
-  
   if (valid_move(gameBoard, move)) {
     var cellIndex = 0;
     const rows = gameBoard.length, cols = gameBoard[0].length;

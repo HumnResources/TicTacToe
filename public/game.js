@@ -115,7 +115,7 @@ function minimax(board, depth, isMax, alpha, beta, useAB) {
     mmCallsTotal++;
     const moves = get_remaining_moves(board);
     const offset = moves.length;
-    const winner = check_winner(board);
+    const winner = check_winner(board)[1];
     
     if (winner === player) {
         return [-1, 10+offset];
@@ -253,7 +253,7 @@ function check_winner(board) {
 }
 
 function check_draw(board) {
-  return (!check_winner(board) && 
+  return (!check_winner(board)[0] && 
           get_remaining_moves(board).length == 0)
 }
 
@@ -288,9 +288,9 @@ function check_game() {
             document.querySelector(`#cell_${cellIndex}`).classList.add("occupied");
           }
           if (result[0]) {
-              document.querySelector(`#cell_${result[1]}`).classList.add("winningCell");
-              document.querySelector(`#cell_${result[2]}`).classList.add("winningCell");
-              document.querySelector(`#cell_${result[3]}`).classList.add("winningCell");
+            document.querySelector(`#cell_${result[1]}`).classList.add("winningCell");
+            document.querySelector(`#cell_${result[2]}`).classList.add("winningCell");
+            document.querySelector(`#cell_${result[3]}`).classList.add("winningCell");
           }
           cellIndex++;
         }

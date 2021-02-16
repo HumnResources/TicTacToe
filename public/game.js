@@ -117,62 +117,59 @@ function minimax(board, depth, isMax, alpha, beta, useAB) {
     const winner = check_winner(board);
     
     if (winner === player) {
-        return [-1, 10+offset];
+        return [NaN, 100+offset];
     }
     else if (winner === computer) {
-        return [-1, -10-offset];
+        return [NaN, -100-offset];
     }
     else if (depth === 0 || offset === 0) {
         if (isMax) {
-            return [-1, offset];
+            return [NaN, offset];
         }
         else {
-            return [-1, -offset];
+            return [NaN, -offset];
         } 
     }
+    var bestMove;
+    var bestScore;
     
-    var bestScore = 0;
-    var bestMove = -1;
     if (isMax) {
-      bestScore = -Infinity;
-      for (var i = 0; i < offset; i++) {
-        var move = moves[i];
-        var nBoard = simulate_move(board, move, player)
-        var moveScore = minimax(nBoard, depth-1, false, alpha, beta)[1];
-        if (moveScore > bestScore) {
-            bestScore = moveScore;
-            bestMove = move
-        }
-        if (useAB) {
-          if (bestScore > alpha) {
-            alpha = bestScore;
-          }
-          if (beta <= alpha) {
-            break;
-          }
-        }
-      } 
+        bestScore = -Infinity;
     }
     else {
-      bestScore = Infinity;
-     for (var i = 0; i < offset; i++) {
+        bestScore = Infinity;
+    }
+    
+    for (var i = 0; i < offset; i++) {
         var move = moves[i];
-        var nBoard = simulate_move(board, move, computer)
-        var moveScore = minimax(nBoard, depth-1, true, alpha, beta)[1];
-        if (moveScore < bestScore) {
-            bestScore = moveScore;
-            bestMove = move;
+        var nBoard;
+        var moveScore;
+        if (isMax) {
+            nBoard = simulate_move(board, move, player);
+            moveScore = minimax(nBoard, depth-1, isMax, alpha, beta, useAB)[1];
+            if (moveScore > bestScore) {
+                bestScore = moveScore;
+                bestMove = move
+            }
+            if (useAB && bestScore > alpha) {
+                alpha = bestScore;
+            }
         }
-        if (useAB)  {
-          if (bestScore < beta) {
-            beta = bestScore;
-          }
-          if (beta <= alpha) {
+        else {
+            nBoard = simulate_move(board, move, computer);
+            moveScore = minimax(nBoard, depth-1, true, alpha, beta, useAB)[1];
+            if (moveScore < bestScore) {
+                bestScore = moveScore;
+                bestMove = move;
+            }
+            if (useAB && bestScore < beta) {
+                beta = bestScore;
+            }
+        }
+        if (useAB && beta <= alpha) {
             break;
-          }
         }
-      }
-    } 
+    }
     return [bestMove, bestScore];
 }
 

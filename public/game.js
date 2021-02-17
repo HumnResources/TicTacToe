@@ -146,7 +146,7 @@ function minimax(board, depth, isMax, alpha, beta, useAB) {
         var moveScore;
         if (isMax) {
             nBoard = simulate_move(board, move, player);
-            moveScore = minimax(nBoard, depth-1, true, alpha, beta, useAB)[1];
+            moveScore = minimax(nBoard, depth-1, false, alpha, beta, useAB)[1];
             if (moveScore > bestScore) {
                 bestScore = moveScore;
                 bestMove = move
